@@ -1,0 +1,48 @@
+
+solidity
+pragma solidity ^0.8.0;
+
+contract MyContract {
+    address public owner;
+    uint public balance;
+
+    constructor() {
+        owner = msg.sender;
+        balance = 0;
+    }
+
+    function deposit() public payable {
+        balance += msg.value;
+    }
+
+    function withdraw(uint amount) public {
+        require(msg.sender == owner, "Only the owner can withdraw");
+        require(amount <= balance, "Insufficient balance");
+        payable(msg.sender).transfer(amount);
+        balance -= amount;
+    }
+}
+```
+
+This contract has two functions:
+
+- `deposit()`: Allows anyone to deposit Ether into the contract.
+- `withdraw(uint amount)`: Allows the contract owner to withdraw a specified amount of Ether from the contract.
+
+Note that this is a very basic example and real-world contracts would require more complexity and security measures.
+
+Also, here's an example of how to interact with this contract using Web3.js:
+
+```
+const Web3 = require('web3');
+const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/YOUR_PROJECT_ID'));
+
+const contractAddress = '0x...'; // Replace with the contract address
+const contractAbi = [...]; // Replace with the contract ABI
+
+const contract = new web3.eth.Contract(contractAbi, contractAddress);
+
+contract.methods.deposit().send({ from: '0x...', value: web3.utils.toWei('1', 'ether') })
+  .then(receipt => console.log(receipt))
+  .catch(error => console.error(error));
+```
