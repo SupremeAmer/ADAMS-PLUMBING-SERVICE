@@ -1,0 +1,23 @@
+HTML:
+```
+<img src="image.jpg" alt="Image" class="image">
+```
+
+CSS:
+```
+.image {
+  width: 500px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Alternative */
+.image {
+  max-width: 500px;
+  max-height: 300px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+```plllllll
