@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -288,13 +287,256 @@
       font-size: 1rem;
       border-radius: 2.2rem 2.2rem 0 0;
     }
+    /* =================== ADMIN PANEL STYLES =================== */
+    .admin-panel-link {
+      display: inline-block;
+      margin-left: 1.7rem;
+      font-weight: 500;
+      color: var(--accent);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: color .2s;
+      text-decoration: underline;
+      padding: 0;
+    }
+    .admin-panel-link:hover {
+      color: var(--primary-light);
+    }
+    .admin-panel-modal-bg {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(34,34,59,0.45);
+      justify-content: center;
+      align-items: start;
+      overflow-y: auto;
+    }
+    .admin-panel-modal-bg.active {
+      display: flex;
+    }
+    .admin-panel-modal {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 36px rgba(60,60,60,.15);
+      max-width: 720px;
+      min-width: 280px;
+      width: 98vw;
+      margin: 2.5rem auto;
+      padding: 2rem 1.5rem 3rem 1.5rem;
+      position: relative;
+      animation: fadeInUp .5s;
+    }
+    .admin-panel-close {
+      position: absolute;
+      right: 1.2rem;
+      top: 1.2rem;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      color: #bbb;
+      cursor: pointer;
+      transition: color .18s;
+    }
+    .admin-panel-close:hover { color: #d90429;}
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2.2rem;
+    }
+    .admin-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: .5px;
+    }
+    .logout-btn {
+      background: var(--accent);
+      color: var(--dark);
+      border: none;
+      font-weight: 600;
+      border-radius: 7px;
+      padding: .6em 1.2em;
+      cursor: pointer;
+      transition: background .18s;
+    }
+    .logout-btn:hover { background: #ffe585;}
+    .login-section {
+      max-width: 340px;
+      margin: 4rem auto 0 auto;
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 18px rgba(60,60,60,.11);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      animation: fadeInDown .7s;
+    }
+    .login-section input {
+      padding: .9em .8em;
+      border-radius: 7px;
+      border: 1px solid #c9c9c9;
+      outline: none;
+      font-size: 1rem;
+    }
+    .login-section button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: .7em 1.5em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .22s;
+    }
+    .login-section button:hover { background: var(--primary-light);}
+    .error-msg {
+      color: #d90429;
+      font-size: 1rem;
+      background: #ffd5d5;
+      padding: .8em 1em;
+      border-radius: 7px;
+      margin-bottom: .8em;
+      display: none;
+    }
+    .success-msg {
+      color: #017501;
+      font-size: 1rem;
+      background: #cdf7cd;
+      padding: .8em 1em;
+      border-radius: 7px;
+      margin-bottom: .8em;
+      display: none;
+    }
+    .post-form {
+      background: #f6faff;
+      border-radius: var(--radius);
+      padding: 1.4rem 1rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 2px 10px rgba(60,60,60,.03);
+      animation: fadeInUp .7s;
+    }
+    .post-form input[type="file"] {
+      margin-bottom: .7rem;
+    }
+    .post-form textarea {
+      width: 100%;
+      min-height: 64px;
+      border-radius: 7px;
+      border: 1px solid #c9c9c9;
+      padding: .8em;
+      font-size: 1rem;
+      margin-bottom: .7rem;
+      resize: vertical;
+    }
+    .post-form button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: .6em 1.7em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .18s;
+    }
+    .post-form button:hover { background: var(--primary-light);}
+    .posts-list {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+    }
+    .post-card {
+      background: #f9f9ff;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 13px rgba(60,60,60,.07);
+      padding: 1.4rem 1.1rem;
+      position: relative;
+      animation: fadeInUp .7s;
+    }
+    .post-media {
+      display: block;
+      margin: 0 auto 1rem auto;
+      max-width: 100%;
+      border-radius: 11px;
+      max-height: 260px;
+      object-fit: contain;
+      background: #eee;
+    }
+    .post-desc {
+      margin-bottom: .6rem;
+      font-size: 1.03rem;
+    }
+    .post-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .like-btn, .comment-btn {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: .3em;
+      transition: color .1s;
+    }
+    .like-btn.liked { color: #d90429;}
+    .like-btn:hover, .comment-btn:hover { color: var(--accent);}
+    .comments-section {
+      margin-top: .4rem;
+      background: #eafcff;
+      border-radius: 9px;
+      padding: .8rem .8rem .3rem .8rem;
+    }
+    .comment {
+      display: flex;
+      align-items: flex-start;
+      gap: .7em;
+      margin-bottom: .7em;
+    }
+    .comment-user {
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .comment-content {
+      background: #fff;
+      border-radius: 7px;
+      padding: .5em .9em;
+      font-size: .97rem;
+      box-shadow: 0 1px 5px rgba(60,60,60,.06);
+    }
+    .add-comment-form {
+      display: flex;
+      gap: .6em;
+      margin-top: .7em;
+      align-items: center;
+    }
+    .add-comment-form input {
+      flex: 1;
+      padding: .5em;
+      border-radius: 6px;
+      border: 1px solid #c9c9c9;
+    }
+    .add-comment-form button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: .5em 1.1em;
+      cursor: pointer;
+      font-weight: 600;
+    }
     @media (max-width: 700px) {
-      .container { max-width: 98vw; }
-      .header__container { flex-direction: column; align-items: flex-start; }
-      .nav { margin-top: .6rem; }
-      .services__grid { grid-template-columns: 1fr; gap: 1.5rem; }
-      .about__container, .contact__container { padding: 1.25rem .7rem; }
-      .hero__title { font-size: 2rem; }
+      .admin-panel-modal { padding: 1.2rem .2rem 2.2rem .2rem; }
+      .admin-title { font-size: 1.15rem; }
     }
   </style>
 </head>
@@ -306,6 +548,7 @@
         <a href="#services">Services</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
+        <button class="admin-panel-link" id="openAdminPanelBtn">Admin</button>
       </nav>
     </div>
   </header>
@@ -385,6 +628,40 @@
       &copy; <span id="year"></span> Adams Plumbing Service. All rights reserved.
     </div>
   </footer>
+
+  <!-- ========== ADMIN PANEL MODAL ========== -->
+  <div class="admin-panel-modal-bg" id="adminPanelModal">
+    <div class="admin-panel-modal" id="adminPanelModalBox">
+      <button class="admin-panel-close" id="closeAdminPanelBtn" title="Close">&times;</button>
+      <!-- Login UI -->
+      <div class="login-section" id="loginSection" style="display:none;">
+        <div style="text-align:center;font-weight:700;color:var(--primary);font-size:1.3rem;margin-bottom:1rem;">Admin Login</div>
+        <div class="error-msg" id="loginError"></div>
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button id="loginBtn">Login</button>
+      </div>
+      <!-- Admin Panel UI -->
+      <div id="adminPanel" style="display:none;">
+        <div class="admin-header">
+          <div class="admin-title">Admin Panel - Adams Plumbing Service</div>
+          <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+        <div class="success-msg" id="postSuccess"></div>
+        <form class="post-form" id="postForm" autocomplete="off">
+          <div style="margin-bottom:.5em;font-weight:600;">Create New Post</div>
+          <input type="file" id="mediaInput" accept="image/*,video/*" required>
+          <textarea id="descInput" placeholder="Enter description..." maxlength="300" required></textarea>
+          <button type="submit">Post</button>
+        </form>
+        <div class="posts-list" id="postsList"></div>
+      </div>
+    </div>
+  </div>
+  <!-- ========== END ADMIN PANEL MODAL ========== -->
+
+  <!-- Appwrite SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
   <script>
     // Animate on scroll (for cards and sections)
     function animateOnScroll() {
@@ -421,6 +698,219 @@
         form.reset();
         setTimeout(() => { successMsg.style.display = 'none'; }, 3200);
       });
+
+      // ========== ADMIN PANEL MODAL HANDLERS ==========
+      const adminPanelModal = document.getElementById('adminPanelModal');
+      const openAdminPanelBtn = document.getElementById('openAdminPanelBtn');
+      const closeAdminPanelBtn = document.getElementById('closeAdminPanelBtn');
+      openAdminPanelBtn.onclick = () => {
+        adminPanelModal.classList.add('active');
+        checkLogin();
+      };
+      closeAdminPanelBtn.onclick = () => {
+        adminPanelModal.classList.remove('active');
+      };
+      adminPanelModal.onclick = (e) => {
+        if (e.target === adminPanelModal) adminPanelModal.classList.remove('active');
+      };
+
+      // ========== APPWRITE ADMIN PANEL ==========
+      // CONFIGURE HERE
+      const APPWRITE_ENDPOINT = "https://cloud.appwrite.io/v1"; // or your endpoint
+      const APPWRITE_PROJECT = "YOUR_PROJECT_ID"; // <-- Set your Appwrite Project ID
+      const POSTS_COLLECTION = "posts";
+      const COMMENTS_COLLECTION = "comments";
+      const LIKES_COLLECTION = "likes";
+      const BUCKET_ID = "media";
+
+      // Appwrite setup
+      const client = new Appwrite.Client()
+        .setEndpoint(APPWRITE_ENDPOINT)
+        .setProject(APPWRITE_PROJECT);
+      const account = new Appwrite.Account(client);
+      const db = new Appwrite.Databases(client);
+      const storage = new Appwrite.Storage(client);
+
+      // UI elements
+      const loginSection = document.getElementById('loginSection');
+      const loginBtn = document.getElementById('loginBtn');
+      const loginEmail = document.getElementById('loginEmail');
+      const loginPassword = document.getElementById('loginPassword');
+      const loginError = document.getElementById('loginError');
+      const adminPanel = document.getElementById('adminPanel');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const postForm = document.getElementById('postForm');
+      const mediaInput = document.getElementById('mediaInput');
+      const descInput = document.getElementById('descInput');
+      const postSuccess = document.getElementById('postSuccess');
+      const postsList = document.getElementById('postsList');
+
+      let currentUser = null;
+      let postsCache = [];
+
+      async function checkLogin() {
+        try {
+          const user = await account.get();
+          currentUser = user;
+          showPanel();
+        } catch (e) {
+          showLogin();
+        }
+      }
+      function showLogin() {
+        loginSection.style.display = "flex";
+        adminPanel.style.display = "none";
+      }
+      function showPanel() {
+        loginSection.style.display = "none";
+        adminPanel.style.display = "block";
+        loadPosts();
+      }
+      loginBtn.onclick = async function () {
+        loginError.style.display = "none";
+        try {
+          await account.createEmailSession(loginEmail.value, loginPassword.value);
+          checkLogin();
+        } catch (e) {
+          loginError.textContent = "Login failed. Please check your credentials.";
+          loginError.style.display = "block";
+        }
+      };
+      logoutBtn.onclick = async function () {
+        await account.deleteSession("current");
+        currentUser = null;
+        showLogin();
+      };
+
+      // ===== POST CREATION =====
+      postForm.onsubmit = async function (e) {
+        e.preventDefault();
+        postSuccess.style.display = "none";
+        const file = mediaInput.files[0];
+        const desc = descInput.value.trim();
+        if (!file || !desc) return;
+
+        try {
+          const fileUpload = await storage.createFile(BUCKET_ID, Appwrite.ID.unique(), file);
+          const fileId = fileUpload.$id;
+          const mime = file.type;
+          await db.createDocument(
+            "default", POSTS_COLLECTION, Appwrite.ID.unique(),
+            {
+              media: fileId,
+              mediaType: mime.startsWith("video") ? "video" : "image",
+              description: desc,
+              createdBy: currentUser.email,
+              createdAt: new Date().toISOString()
+            }
+          );
+          postSuccess.textContent = "Post published!";
+          postSuccess.style.display = "block";
+          postForm.reset();
+          setTimeout(() => postSuccess.style.display = "none", 1800);
+          loadPosts();
+        } catch (e) {
+          postSuccess.textContent = "Error posting: " + (e.message || "Unknown error");
+          postSuccess.style.display = "block";
+        }
+      };
+
+      // ===== LOAD POSTS =====
+      async function loadPosts() {
+        postsList.innerHTML = '<div style="text-align:center;color:#888">Loading...</div>';
+        try {
+          const res = await db.listDocuments("default", POSTS_COLLECTION, [Appwrite.Query.orderDesc("createdAt"), Appwrite.Query.limit(20)]);
+          postsCache = res.documents;
+          renderPosts();
+        } catch (e) {
+          postsList.innerHTML = '<div style="text-align:center;color:#c00">Failed to load posts.</div>';
+        }
+      }
+
+      // ===== RENDER POSTS =====
+      async function renderPosts() {
+        postsList.innerHTML = "";
+        for (const post of postsCache) {
+          let mediaUrl = "";
+          try {
+            mediaUrl = storage.getFilePreview(BUCKET_ID, post.media, 600, 400, "top", undefined, undefined, undefined, undefined).href;
+          } catch {}
+          let likesCount = 0;
+          let liked = false;
+          try {
+            const likesRes = await db.listDocuments("default", LIKES_COLLECTION, [Appwrite.Query.equal("postId", post.$id)]);
+            likesCount = likesRes.documents.length;
+            if (currentUser) liked = likesRes.documents.some(l => l.user === currentUser.email);
+          } catch {}
+          let comments = [];
+          try {
+            const commRes = await db.listDocuments("default", COMMENTS_COLLECTION, [Appwrite.Query.equal("postId", post.$id), Appwrite.Query.orderAsc("createdAt")]);
+            comments = commRes.documents;
+          } catch {}
+          const card = document.createElement("div");
+          card.className = "post-card";
+          let mediaHtml = "";
+          if (post.mediaType === "video") {
+            mediaHtml = `<video class="post-media" src="${mediaUrl}" controls loop preload="metadata"></video>`;
+          } else if (post.mediaType === "image") {
+            mediaHtml = `<img class="post-media" src="${mediaUrl}" alt="Post media" loading="lazy" />`;
+          }
+          card.innerHTML = `
+            ${mediaHtml}
+            <div class="post-desc">${post.description.replace(/</g,"&lt;")}</div>
+            <div class="post-actions">
+              <button class="like-btn${liked ? " liked":""}" data-id="${post.$id}" title="Like">&#x2764; <span>${likesCount}</span></button>
+              <button class="comment-btn" data-id="${post.$id}" title="Comment">&#128172; <span>${comments.length}</span></button>
+            </div>
+            <div class="comments-section" id="comments-${post.$id}" style="display:none;">
+              <div class="comments-list">
+                ${comments.map(c => `<div class="comment"><span class="comment-user">${c.user || "Guest"}:</span><span class="comment-content">${c.text.replace(/</g,"&lt;")}</span></div>`).join("")}
+              </div>
+              <form class="add-comment-form" data-id="${post.$id}">
+                <input type="text" placeholder="Add a comment..." maxlength="120" required>
+                <button type="submit">Post</button>
+              </form>
+            </div>
+          `;
+          postsList.appendChild(card);
+
+          card.querySelector(".like-btn").onclick = async function() {
+            if (!currentUser) return alert("Login to like");
+            try {
+              if (!liked) {
+                await db.createDocument("default", LIKES_COLLECTION, Appwrite.ID.unique(), {postId: post.$id, user: currentUser.email});
+              } else {
+                const likesRes = await db.listDocuments("default", LIKES_COLLECTION, [Appwrite.Query.equal("postId", post.$id), Appwrite.Query.equal("user", currentUser.email)]);
+                if (likesRes.documents[0]) {
+                  await db.deleteDocument("default", LIKES_COLLECTION, likesRes.documents[0].$id);
+                }
+              }
+              loadPosts();
+            } catch {}
+          };
+
+          card.querySelector(".comment-btn").onclick = function() {
+            const section = card.querySelector(`#comments-${post.$id}`);
+            section.style.display = section.style.display === "none" ? "block" : "none";
+          };
+          card.querySelector(".add-comment-form").onsubmit = async function(ev) {
+            ev.preventDefault();
+            const input = this.querySelector("input");
+            const text = input.value.trim();
+            if (!text) return;
+            try {
+              await db.createDocument("default", COMMENTS_COLLECTION, Appwrite.ID.unique(), {
+                postId: post.$id,
+                user: currentUser ? currentUser.email : "Guest",
+                text,
+                createdAt: new Date().toISOString()
+              });
+              input.value = "";
+              loadPosts();
+            } catch {}
+          };
+        }
+      }
     });
   </script>
 </body>
