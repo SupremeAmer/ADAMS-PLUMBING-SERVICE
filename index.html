@@ -1207,10 +1207,73 @@
     window.addEventListener('DOMContentLoaded', fakeVisitorCount);
 
     // =================== ADMIN PANEL PLACEHOLDER ===================
-    // (Add Appwrite integration logic as before if needed)
-    function checkLogin() {
-      document.getElementById("loginSection").style.display = "flex";
-      document.getElementById("adminPanel").style.display = "none";
+    // <!-- Appwrite SDK (add before this script if not already included) -->
+<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+<script>
+// =================== APPWRITE ADMIN PANEL INTEGRATION ===================
+// 1. SET YOUR APPWRITE PROJECT DETAILS HERE:
+const APPWRITE_ENDPOINT = "https://cloud.appwrite.io/v1"; // or your Appwrite endpoint
+const APPWRITE_PROJECT = "YOUR_PROJECT_ID";               // <-- SET YOUR PROJECT ID
+const POSTS_COLLECTION = "posts";                         // <-- your posts collection
+const COMMENTS_COLLECTION = "comments";                   // <-- your comments collection
+const LIKES_COLLECTION = "likes";                         // <-- your likes collection
+const BUCKET_ID = "media";                                // <-- your media bucket
+
+// 2. Appwrite setup
+const client = new Appwrite.Client()
+  .setEndpoint(APPWRITE_ENDPOINT)
+  .setProject(APPWRITE_PROJECT);
+const account = new Appwrite.Account(client);
+const db = new Appwrite.Databases(client);
+const storage = new Appwrite.Storage(client);
+
+// 3. UI elements
+const loginSection = document.getElementById('loginSection');
+const loginBtn = document.getElementById('loginBtn');
+const loginEmail = document.getElementById('loginEmail');
+const loginPassword = document.getElementById('loginPassword');
+const loginError = document.getElementById('loginError');
+const adminPanel = document.getElementById('adminPanel');
+const logoutBtn = document.getElementById('logoutBtn');
+// ...add the rest as needed for your panel...
+
+let currentUser = null;
+
+// 4. Admin Login Logic
+async function checkLogin() {
+  try {
+    const user = await account.get();
+    currentUser = user;
+    loginSection.style.display = "none";
+    adminPanel.style.display = "block";
+    // Optionally: loadPosts(); // or whatever admin loads
+  } catch (e) {
+    loginSection.style.display = "flex";
+    adminPanel.style.display = "none";
+  }
+}
+
+loginBtn.onclick = async function () {
+  loginError.style.display = "none";
+  try {
+    await account.createEmailSession(loginEmail.value, loginPassword.value);
+    checkLogin();
+  } catch (e) {
+    loginError.textContent = "Login failed. Please check your credentials.";
+    loginError.style.display = "block";
+  }
+};
+
+logoutBtn.onclick = async function () {
+  await account.deleteSession("current");
+  currentUser = null;
+  loginSection.style.display = "flex";
+  adminPanel.style.display = "none";
+};
+
+// Optional: run checkLogin() when admin modal is opened
+// openAdminPanelBtn.onclick = () => { adminPanelModal.classList.add('active'); checkLogin(); };
+
     }
   </script>
 </body>
