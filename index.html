@@ -814,18 +814,18 @@
       to { opacity: 1; transform: translateY(0);}
     }
     @keyframes bounceIn { 0% {transform: scale(0.2);} 80% {transform: scale(1.16);} 100% {transform: scale(1);} }
+  
   </style>
 </head>
 <body>
   <header class="header">
     <div class="container header__container">
       <div class="logo">
-        🚰 Adams
-        <button class="admin-panel-link" id="openAdminPanelBtn" tabindex="0" aria-label="Admin">Admin</button>
+        
+        <button class="admin-panel-link" id="openAdminPanelBtn" tabindex="0" aria-label="Admin">🚰 Adams</button>
         &nbsp;Plumbing Service
       </div>
       <nav class="nav" id="mainNav">
-        <!-- [ ... your nav links and social icons as before ... ] -->
         <a href="#services">Services</a>
         <a href="#about">About</a>
         <a href="#testimonials">Testimonials</a>
@@ -843,6 +843,8 @@
       </nav>
     </div>
   </header>
+
+ 
  <section class="hero" id="hero">
     <svg class="hero__bg-wave" viewBox="0 0 1440 320"><path fill="#00b4d8" fill-opacity="0.4" d="M0,224L60,208C120,192,240,160,360,133.3C480,107,600,85,720,80C840,75,960,85,1080,122.7C1200,160,1320,224,1380,256L1440,288L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>
     <div class="container hero__container">
@@ -1015,6 +1017,8 @@
       <a href="https://t.me/adamsplumbing" target="_blank" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
     </div>
   </div>
+  
+
   <!-- Admin Modal (Connect-like) -->
   <div class="admin-panel-modal-bg" id="adminPanelModal">
     <div class="admin-panel-modal" id="adminPanelModalBox">
@@ -1039,19 +1043,23 @@
     </div>
   </div>
 
-  <!-- [ ... The rest of your site content ... ] -->
-
   <script>
-    // --- Appwrite Admin Logic ---
+    // --- Appwrite Admin Auth Logic (client-side, 3 emails only) ---
     const APPWRITE_ENDPOINT = "https://fra.cloud.appwrite.io/v1";
     const APPWRITE_PROJECT = "6836db1d002d60646b91"; // <-- your project ID
-    const ADMINS_COLLECTION = "admins"; // <-- your collection name or ID
+
+    // ----- PLACE TO PUT YOUR 3 ADMIN EMAILS -----
+    // Replace the below with your 3 admin emails:
+    const ALLOWED_ADMINS = [
+      "supremeameraooplications@gmail.com",    // <-- Admin email 1
+      "supremealpha04@example.com",  // <-- Admin email 2
+      "thirdadmin@example.com"    // <-- Admin email 3
+    ];
 
     const client = new window.Appwrite.Client()
       .setEndpoint(APPWRITE_ENDPOINT)
       .setProject(APPWRITE_PROJECT);
     const account = new window.Appwrite.Account(client);
-    const db = new window.Appwrite.Databases(client);
 
     // UI Elements
     const loginSection = document.getElementById('loginSection');
@@ -1063,58 +1071,6 @@
     const logoutBtn = document.getElementById('logoutBtn');
 
     let currentUser = null;
-
-    async function adminsCountOk(email) {
-      try {
-        const res = await db.listDocuments("default", ADMINS_COLLECTION);
-        const emails = res.documents.map(doc => doc.email);
-        if (emails.includes(email)) return true;
-        return res.documents.length < 3;
-      } catch(e) { return false; }
-    }
-    async function checkLogin() {
-      try {
-        const user = await account.get();
-        currentUser = user;
-        const res = await db.listDocuments("default", ADMINS_COLLECTION, [window.Appwrite.Query.equal("email", user.email)]);
-        if (res.documents.length === 0) {
-          loginError.textContent = "You are not an admin.";
-          loginError.style.display = "block";
-          loginSection.style.display = "flex";
-          adminPanel.style.display = "none";
-          return;
-        }
-        loginSection.style.display = "none";
-        adminPanel.style.display = "block";
-        loginError.style.display = "none";
-      } catch (e) {
-        loginSection.style.display = "flex";
-        adminPanel.style.display = "none";
-      }
-    }
-    loginBtn.onclick = async function () {
-      loginError.style.display = "none";
-      try {
-        await account.createEmailSession(loginEmail.value, loginPassword.value);
-        const ok = await adminsCountOk(loginEmail.value);
-        if (!ok) {
-          loginError.textContent = "Maximum admin limit (3) reached or not an admin.";
-          loginError.style.display = "block";
-          await account.deleteSession("current");
-          return;
-        }
-        checkLogin();
-      } catch (e) {
-        loginError.textContent = "Login failed. Please check your credentials.";
-        loginError.style.display = "block";
-      }
-    };
-    logoutBtn.onclick = async function () {
-      await account.deleteSession("current");
-      currentUser = null;
-      loginSection.style.display = "flex";
-      adminPanel.style.display = "none";
-    };
 
     // --- Modal handlers ---
     const adminPanelModal = document.getElementById('adminPanelModal');
@@ -1131,10 +1087,56 @@
       if (e.target === adminPanelModal) adminPanelModal.classList.remove('active');
     };
 
-// Footer year
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // --- Admin login logic (client-side, 3 emails only) ---
+    async function checkLogin() {
+      try {
+        const user = await account.get();
+        currentUser = user;
+        if (!ALLOWED_ADMINS.map(e => e.trim().toLowerCase()).includes(user.email.toLowerCase())) {
+          loginError.textContent = "You are not an admin.";
+          loginError.style.display = "block";
+          loginSection.style.display = "flex";
+          adminPanel.style.display = "none";
+          await account.deleteSession("current");
+          return;
+        }
+        loginSection.style.display = "none";
+        adminPanel.style.display = "block";
+        loginError.style.display = "none";
+      } catch (e) {
+        loginSection.style.display = "flex";
+        adminPanel.style.display = "none";
+      }
+    }
+    loginBtn.onclick = async function () {
+      loginError.style.display = "none";
+      try {
+        // Only allow login if email is among the 3 admins
+        if (!ALLOWED_ADMINS.map(e => e.trim().toLowerCase()).includes(loginEmail.value.trim().toLowerCase())) {
+          loginError.textContent = "This email is not an admin.";
+          loginError.style.display = "block";
+          return;
+        }
+        await account.createEmailSession(loginEmail.value, loginPassword.value);
+        checkLogin();
+      } catch (e) {
+        loginError.textContent = "Login failed. Please check your credentials.";
+        loginError.style.display = "block";
+      }
+    };
+    logoutBtn.onclick = async function () {
+      await account.deleteSession("current");
+      currentUser = null;
+      loginSection.style.display = "flex";
+      adminPanel.style.display = "none";
+    };
 
-    // Sticky nav highlight
+    // === [All other JS for nav highlight, dark mode, testimonials, counters, contact form, live chat etc.] ===
+    // [Paste your full JS for features EXACTLY as in your previous working code.]
+
+    // Example: update year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  // Sticky nav highlight
     var navLinks = Array.from(document.querySelectorAll('.nav a')).filter(a => a.getAttribute('href').startsWith('#'));
     function highlightNav() {
       let fromTop = window.scrollY + 110;
@@ -1264,6 +1266,6 @@
       if (window.innerWidth > 700)
         parallax.style.backgroundPosition = `center ${-scrolled*0.2}px`;
     });
-  </script>
+    </script>
 </body>
 </html>
