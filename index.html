@@ -1151,131 +1151,6 @@
       loginSection.style.display = "flex";
       adminPanel.style.display = "none";
     };
-    // --- Appwrite Config for posts/media ---
-const BUCKET_ID = "6836f9b8001e08e60425"; // <-- Set your bucket ID here
-const POSTS_COLLECTION_ID = "posts"; // <-- Set your collection ID here
-
-const storage = new window.Appwrite.Storage(client);
-const db = new window.Appwrite.Databases(client);
-
-// --- Admin media post form ---
-const mediaPostForm = document.getElementById('mediaPostForm');
-const mediaFile = document.getElementById('mediaFile');
-const mediaDesc = document.getElementById('mediaDesc');
-const postSuccess = document.getElementById('postSuccess');
-const adminPostList = document.getElementById('adminPostList');
-
-if(mediaPostForm){
-  mediaPostForm.onsubmit = async function(e) {
-    e.preventDefault();
-    postSuccess.style.display = "none";
-    if (!mediaFile.files[0] || !mediaDesc.value.trim()) return;
-    const file = mediaFile.files[0];
-    const desc = mediaDesc.value.trim();
-    try {
-      // 1. Upload file to Appwrite Storage
-      const fileRes = await storage.createFile(BUCKET_ID, window.Appwrite.ID.unique(), file);
-      // 2. Get public URL
-      const url = storage.getFileView(BUCKET_ID, fileRes.$id).href;
-      // 3. Detect file type
-      const type = file.type.startsWith("video") ? "video" : "image";
-      // 4. Save post in Appwrite DB
-      await db.createDocument("default", POSTS_COLLECTION_ID, window.Appwrite.ID.unique(), {
-        description: desc,
-        fileUrl: url,
-        fileType: type,
-        createdAt: new Date().toISOString()
-      });
-      postSuccess.textContent = "Post uploaded successfully!";
-      postSuccess.style.display = "block";
-      mediaFile.value = "";
-      mediaDesc.value = "";
-      loadAdminPosts();
-      loadGallery();
-    } catch(err) {
-      postSuccess.textContent = "Error: " + (err.message || "Could not upload.");
-      postSuccess.style.display = "block";
-    }
-  }
-}
-
-// --- Admin: Show all posts (as admin) ---
-async function loadAdminPosts(){
-  if(!adminPostList) return;
-  adminPostList.innerHTML = "<li>Loading...</li>";
-  try {
-    const res = await db.listDocuments("default", POSTS_COLLECTION_ID, [window.Appwrite.Query.orderDesc("createdAt")]);
-    adminPostList.innerHTML = "";
-    res.documents.forEach(post => {
-      let html = `<li style="margin-bottom:1em;">
-        ${post.fileType==="image"
-          ? `<img src="${post.fileUrl}" style="max-width:120px;max-height:80px;border-radius:5px;">`
-          : `<video src="${post.fileUrl}" style="max-width:120px;max-height:80px;border-radius:5px;" controls></video>`
-        }
-        <span style="margin-left:1em">${post.description}</span>
-        <button onclick="deletePost('${post.$id}','${post.fileUrl}')"
-          style="margin-left:1em;color:#d90429;font-weight:bold;">Delete</button>
-      </li>`;
-      adminPostList.innerHTML += html;
-    });
-  } catch(e){
-    adminPostList.innerHTML = "<li>Error loading posts.</li>";
-  }
-}
-
-// --- Delete post (admin only) ---
-window.deletePost = async function(id, fileUrl){
-  if(!confirm("Delete this post?")) return;
-  try {
-    // Delete DB entry
-    await db.deleteDocument("default", POSTS_COLLECTION_ID, id);
-    // Extract file ID from URL
-    const fid = fileUrl.split("/files/")[1].split("/view")[0];
-    await storage.deleteFile(BUCKET_ID, fid);
-    loadAdminPosts();
-    loadGallery();
-  } catch(e){
-    alert("Error deleting post.");
-  }
-}
-
-// --- Load posts for admin and on login ---
-if(typeof loadAdminPosts !== "undefined") loadAdminPosts();
-
-// --- Load posts for public Gallery ---
-function renderGallery(posts){
-  const gallery = document.getElementById('publicGallery');
-  if(!gallery) return;
-  gallery.innerHTML = posts.map(post =>
-    `<div class="gallery-item">
-      ${post.fileType==="image"
-        ? `<img src="${post.fileUrl}" alt="" style="max-width:100%;border-radius:1em;margin-bottom:0.5em;">`
-        : `<video src="${post.fileUrl}" controls style="max-width:100%;border-radius:1em;margin-bottom:0.5em;"></video>`
-      }
-      <div class="gallery-desc">${post.description}</div>
-    </div>`
-  ).join('');
-}
-async function loadGallery(){
-  const gallery = document.getElementById('publicGallery');
-  if(!gallery) return;
-  gallery.innerHTML = "<div>Loading gallery...</div>";
-  try {
-    const res = await db.listDocuments("default", POSTS_COLLECTION_ID, [window.Appwrite.Query.orderDesc("createdAt")]);
-    renderGallery(res.documents);
-  } catch(e){
-    gallery.innerHTML = "<div>Error loading gallery.</div>";
-  }
-}
-loadGallery();
- 
-<!-- Gallery for all visitors, anywhere you want (e.g. after hero, before footer): -->
-<section class="gallery-section" style="padding:2em 0;">
-  <div class="container">
-    <h2 class="section-title">Gallery</h2>
-    <div id="publicGallery" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2em;"></div>
-  </div>
-</section>
 
    document.getElementById('year').textContent = new Date().getFullYear();
   // Sticky nav highlight
@@ -1408,6 +1283,132 @@ loadGallery();
       if (window.innerWidth > 700)
         parallax.style.backgroundPosition = `center ${-scrolled*0.2}px`;
     });
+        // --- Appwrite Config for posts/media ---
+const BUCKET_ID = "6836f9b8001e08e60425"; // <-- Set your bucket ID here
+const POSTS_COLLECTION_ID = "posts"; // <-- Set your collection ID here
+
+const storage = new window.Appwrite.Storage(client);
+const db = new window.Appwrite.Databases(client);
+
+// --- Admin media post form ---
+const mediaPostForm = document.getElementById('mediaPostForm');
+const mediaFile = document.getElementById('mediaFile');
+const mediaDesc = document.getElementById('mediaDesc');
+const postSuccess = document.getElementById('postSuccess');
+const adminPostList = document.getElementById('adminPostList');
+
+if(mediaPostForm){
+  mediaPostForm.onsubmit = async function(e) {
+    e.preventDefault();
+    postSuccess.style.display = "none";
+    if (!mediaFile.files[0] || !mediaDesc.value.trim()) return;
+    const file = mediaFile.files[0];
+    const desc = mediaDesc.value.trim();
+    try {
+      // 1. Upload file to Appwrite Storage
+      const fileRes = await storage.createFile(BUCKET_ID, window.Appwrite.ID.unique(), file);
+      // 2. Get public URL
+      const url = storage.getFileView(BUCKET_ID, fileRes.$id).href;
+      // 3. Detect file type
+      const type = file.type.startsWith("video") ? "video" : "image";
+      // 4. Save post in Appwrite DB
+      await db.createDocument("default", POSTS_COLLECTION_ID, window.Appwrite.ID.unique(), {
+        description: desc,
+        fileUrl: url,
+        fileType: type,
+        createdAt: new Date().toISOString()
+      });
+      postSuccess.textContent = "Post uploaded successfully!";
+      postSuccess.style.display = "block";
+      mediaFile.value = "";
+      mediaDesc.value = "";
+      loadAdminPosts();
+      loadGallery();
+    } catch(err) {
+      postSuccess.textContent = "Error: " + (err.message || "Could not upload.");
+      postSuccess.style.display = "block";
+    }
+  }
+}
+
+// --- Admin: Show all posts (as admin) ---
+async function loadAdminPosts(){
+  if(!adminPostList) return;
+  adminPostList.innerHTML = "<li>Loading...</li>";
+  try {
+    const res = await db.listDocuments("default", POSTS_COLLECTION_ID, [window.Appwrite.Query.orderDesc("createdAt")]);
+    adminPostList.innerHTML = "";
+    res.documents.forEach(post => {
+      let html = `<li style="margin-bottom:1em;">
+        ${post.fileType==="image"
+          ? `<img src="${post.fileUrl}" style="max-width:120px;max-height:80px;border-radius:5px;">`
+          : `<video src="${post.fileUrl}" style="max-width:120px;max-height:80px;border-radius:5px;" controls></video>`
+        }
+        <span style="margin-left:1em">${post.description}</span>
+        <button onclick="deletePost('${post.$id}','${post.fileUrl}')"
+          style="margin-left:1em;color:#d90429;font-weight:bold;">Delete</button>
+      </li>`;
+      adminPostList.innerHTML += html;
+    });
+  } catch(e){
+    adminPostList.innerHTML = "<li>Error loading posts.</li>";
+  }
+}
+
+// --- Delete post (admin only) ---
+window.deletePost = async function(id, fileUrl){
+  if(!confirm("Delete this post?")) return;
+  try {
+    // Delete DB entry
+    await db.deleteDocument("default", POSTS_COLLECTION_ID, id);
+    // Extract file ID from URL
+    const fid = fileUrl.split("/files/")[1].split("/view")[0];
+    await storage.deleteFile(BUCKET_ID, fid);
+    loadAdminPosts();
+    loadGallery();
+  } catch(e){
+    alert("Error deleting post.");
+  }
+}
+
+// --- Load posts for admin and on login ---
+if(typeof loadAdminPosts !== "undefined") loadAdminPosts();
+
+// --- Load posts for public Gallery ---
+function renderGallery(posts){
+  const gallery = document.getElementById('publicGallery');
+  if(!gallery) return;
+  gallery.innerHTML = posts.map(post =>
+    `<div class="gallery-item">
+      ${post.fileType==="image"
+        ? `<img src="${post.fileUrl}" alt="" style="max-width:100%;border-radius:1em;margin-bottom:0.5em;">`
+        : `<video src="${post.fileUrl}" controls style="max-width:100%;border-radius:1em;margin-bottom:0.5em;"></video>`
+      }
+      <div class="gallery-desc">${post.description}</div>
+    </div>`
+  ).join('');
+}
+async function loadGallery(){
+  const gallery = document.getElementById('publicGallery');
+  if(!gallery) return;
+  gallery.innerHTML = "<div>Loading gallery...</div>";
+  try {
+    const res = await db.listDocuments("default", POSTS_COLLECTION_ID, [window.Appwrite.Query.orderDesc("createdAt")]);
+    renderGallery(res.documents);
+  } catch(e){
+    gallery.innerHTML = "<div>Error loading gallery.</div>";
+  }
+}
+loadGallery();
+ 
+<!-- Gallery for all visitors, anywhere you want (e.g. after hero, before footer): -->
+<section class="gallery-section" style="padding:2em 0;">
+  <div class="container">
+    <h2 class="section-title">Gallery</h2>
+    <div id="publicGallery" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2em;"></div>
+  </div>
+</section>
+
     </script>
 </body>
 </html>
