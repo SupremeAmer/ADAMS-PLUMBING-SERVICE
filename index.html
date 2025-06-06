@@ -1017,7 +1017,14 @@
       <a href="https://t.me/adamsplumbing" target="_blank" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
     </div>
   </div>
-  
+  <!-- Gallery for all visitors, anywhere you want (e.g. after hero, before footer): -->
+<section class="gallery-section" style="padding:2em 0;">
+  <div class="container">
+    <h2 class="section-title">Gallery</h2>
+    <div id="publicGallery" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2em;"></div>
+  </div>
+</section>
+
 
   <!-- Admin Modal (Connect-like) -->
   <div class="admin-panel-modal-bg" id="adminPanelModal">
@@ -1401,13 +1408,6 @@ async function loadGallery(){
 }
 loadGallery();
  
-<!-- Gallery for all visitors, anywhere you want (e.g. after hero, before footer): -->
-<section class="gallery-section" style="padding:2em 0;">
-  <div class="container">
-    <h2 class="section-title">Gallery</h2>
-    <div id="publicGallery" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2em;"></div>
-  </div>
-</section>
 
     </script>
 </body>
